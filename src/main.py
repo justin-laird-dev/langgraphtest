@@ -4,12 +4,20 @@ from langchain_anthropic import ChatAnthropic
 from langchain_core.messages import HumanMessage, AIMessage
 import os
 from dotenv import load_dotenv
+import argparse
+import base64
+from pathlib import Path
 
 # Load environment variables
 load_dotenv()
 if not os.getenv("ANTHROPIC_API_KEY"):
     print("Error: ANTHROPIC_API_KEY not found in environment variables")
     exit(1)
+
+def encode_image_to_base64(image_path: str) -> str:
+    """Convert image to base64 string"""
+    with open(image_path, "rb") as image_file:
+        return base64.b64encode(image_file.read()).decode('utf-8')
 
 # Define our state type
 class AgentState(TypedDict):
@@ -23,6 +31,7 @@ print("Successfully initialized ChatAnthropic")
 def researcher(state: AgentState) -> AgentState:
     """Research node that processes the initial query."""
     print("Sending request to Claude...")
+    
     messages = state["messages"]
     response = model.invoke(messages)
     print("Received response from Claude")
@@ -32,7 +41,25 @@ def researcher(state: AgentState) -> AgentState:
         "next_step": "complete"
     }
 
-def run_workflow(question: str):
+def create_multimodal_message(question: str, image_paths: list[str]) -> HumanMessage:
+    """Create a message with text and images"""
+    content = [{"type": "text", "text": question}]
+    
+    for image_path in image_paths:
+        # Convert image to base64
+        base64_image = encode_image_to_base64(image_path)
+        content.append({
+            "type": "image",
+            "source": {
+                "type": "base64",
+                "media_type": "image/jpeg",
+                "data": base64_image
+            }
+        })
+    
+    return HumanMessage(content=content)
+
+def run_workflow(question: str, image_paths: list[str]):
     # Create the graph
     workflow = Graph()
     
@@ -48,9 +75,12 @@ def run_workflow(question: str):
     # Compile the graph
     chain = workflow.compile()
     
+    # Create multimodal message
+    initial_message = create_multimodal_message(question, image_paths)
+    
     # Create initial state
     initial_state = {
-        "messages": [HumanMessage(content=question)],
+        "messages": [initial_message],
         "next_step": "start"
     }
     
@@ -59,11 +89,25 @@ def run_workflow(question: str):
     return final_state
 
 if __name__ == "__main__":
-    question = "What are the main features of LangGraph?"
-    print("\nStarting workflow with question:", question)
+    # Set up argument parser
+    parser = argparse.ArgumentParser(description='Analyze images using Claude')
+    parser.add_argument('--images', nargs='+', help='Paths to image files', required=True)
+    parser.add_argument('--question', type=str, 
+                       default="What's in these images? Please describe them in detail.",
+                       help='Question to ask about the images')
     
-    result = run_workflow(question)
-    print("\nWorkflow completed")
+    args = parser.parse_args()
+    
+    # Verify images exist
+    for image_path in args.images:
+        if not Path(image_path).exists():
+            print(f"Error: Image file not found: {image_path}")
+            exit(1)
+    
+    print(f"\nAnalyzing {len(args.images)} images...")
+    print(f"Question: {args.question}\n")
+    
+    result = run_workflow(args.question, args.images)
     
     if result:
         print("\nResult received. Processing messages...")
@@ -74,6 +118,11 @@ if __name__ == "__main__":
                 print(msg.content)
             elif isinstance(msg, HumanMessage):
                 print("\nHuman Message:")
-                print(msg.content)
+                if isinstance(msg.content, list):
+                    # Print only the text part of multimodal message
+                    text_contents = [c["text"] for c in msg.content if c["type"] == "text"]
+                    print("\n".join(text_contents))
+                else:
+                    print(msg.content)
     else:
         print("No result received from workflow") 
