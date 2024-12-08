@@ -1,36 +1,83 @@
 # LangGraph Demo with Claude Vision
 
-A demonstration of Claude 3's multimodal capabilities using LangGraph for workflow management.
+A comprehensive demonstration of Claude 3's multimodal capabilities integrated with LangGraph for structured conversation workflows. This project showcases how to build an interactive chat application with image analysis features using TypeScript and the latest Claude 3 model.
 
 ## Features
-- Interactive chat with Claude 3 Sonnet
-- Image analysis using Claude's vision capabilities 
-- Conversation memory and context management
-- Support for multiple image formats (png, jpg, jpeg, gif)
+- Interactive chat powered by Claude 3 Sonnet (latest model: claude-3-sonnet-20240229)
+- Advanced image analysis using Claude's multimodal capabilities
+- Structured conversation flow using LangGraph
+- Robust memory and context management
+- Support for multiple image formats (JPEG, PNG)
+- Type-safe implementation in TypeScript
+- Detailed debugging and error handling
 
-## Setup & Usage
+## Architecture
+The project uses a graph-based architecture with distinct nodes for:
+- Image analysis
+- Response generation
+- State management
+- Memory handling
 
-1. Install dependencies:
-   pip install -r requirements.txt
+## Prerequisites
+- Node.js 18+ 
+- TypeScript 5.3+
+- An Anthropic API key
 
-2. Create .env file with your API key:
-   ANTHROPIC_API_KEY=your_key_here
+## Setup & Installation
 
-3. Run the application:
-   python src/main.py
+1. Clone the repository:
+   \`\`\`
+   git clone https://github.com/yourusername/langgraph-demo
+   cd langgraph-demo
+   \`\`\`
 
-## Commands
-- Chat: Type any message
-- Images: --image path/to/image.png
-- Exit: Type 'quit'
+2. Install dependencies:
+   \`\`\`
+   npm install
+   \`\`\`
 
-## Example
-Get a random cat image:
-curl -o cat.png https://cataas.com/cat
+3. Create a \`.env\` file in the root directory:
+   \`\`\`
+   ANTHROPIC_API_KEY=your_api_key_here
+   \`\`\`
 
-Then analyze it:
-python src/main.py
---image cat.png
+## Usage
+
+\`\`\`typescript
+import { ChatFlow } from './src/chatFlow';
+
+const flow = new ChatFlow();
+await flow.start({
+  message: "Analyze this image",
+  imageUrl: "./path/to/image.jpg"
+});
+\`\`\`
+
+## Project Structure
+\`\`\`
+langgraph-demo/
+├─�├─�├─�├─�├─�├─�├─� ├── imageAnalysis.ts
+│   │   ├�│   │   ├�│   │   ├�│   │   ��─ stateManagement.ts
+│   ├── types/
+│   │   └── index.ts
+│   └── chatFlow.ts
+├── tests/
+├── .env
+└── package.json
+\`\`\`
+
+## Contributing
+1. Fork the repository
+2.2.2.2.2.2.2.2.eature branch (\`git che2.2.2.2.2.2.ture/amazing-feature\`)
+3. Commit your changes (\`git commit -m 'Add some amazing featu3. Commit your ch the branch (\`git3. Commit your changes (\`git commit -m 'Add some amaz Request
 
 ## License
-MIT
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Acknowledgments
+- Anthropic for the Claude 3 API
+- LangGraph community
+- Contributors and maintainers
+
+## Support
+For support, please open an issue in the GitHub repository or contact the maintainers.
