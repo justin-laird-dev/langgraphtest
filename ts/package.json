@@ -1,0 +1,25 @@
+{
+  "name": "langgraph-ts",
+  "version": "1.0.0",
+  "description": "TypeScript implementation of LangGraph with Claude Vision",
+  "main": "dist/main.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "ts-node src/main.ts",
+    "dev": "ts-node-dev --respawn src/main.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.32.1",
+    "@langchain/anthropic": "^0.1.1",
+    "@langchain/community": "^0.0.34",
+    "@langchain/core": "^0.2.21",
+    "@types/node": "^20.11.24",
+    "dotenv": "^16.4.7",
+    "langchain": "^0.1.9",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  }
+}
