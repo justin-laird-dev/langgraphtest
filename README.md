@@ -1,43 +1,36 @@
 # LangGraph Demo with Claude Vision
 
-A demonstration of using LangGraph with Claude 3's multimodal capabilities to analyze images.
+A demonstration of Claude 3's multimodal capabilities using LangGraph for workflow management.
 
-## Documentation Links
-- [LangGraph Documentation](https://python.langchain.com/docs/langgraph)
-- [Claude 3 API Documentation](https://docs.anthropic.com/claude/docs)
-- [LangChain Anthropic Integration](https://python.langchain.com/docs/integrations/chat/anthropic)
-- [Claude Vision Guide](https://docs.anthropic.com/claude/docs/vision)
+## Features
+- Interactive chat with Claude 3 Sonnet
+- Image analysis using Claude's vision capabilities 
+- Conversation memory and context management
+- Support for multiple image formats (png, jpg, jpeg, gif)
 
-## Setup
+## Setup & Usage
 
-1. Clone the repository
-2. Create a `.env` file with your Anthropic API key:
-   ```
-   ANTHROPIC_API_KEY=your_key_here
-   ```
-3. Create and activate a virtual environment:
-   ```bash
-   python -m venv venv
-   source venv/bin/activate  # On Windows use: venv\Scripts\activate
-   ```
-4. Install dependencies:
-   ```bash
+1. Install dependencies:
    pip install -r requirements.txt
-   ```
 
-## Usage
+2. Create .env file with your API key:
+   ANTHROPIC_API_KEY=your_key_here
 
-Basic usage:
-```bash
-python src/main.py --images path/to/image.jpg
-```
+3. Run the application:
+   python src/main.py
 
-Multiple images:
-```bash
-python src/main.py --images image1.jpg image2.jpg
-```
+## Commands
+- Chat: Type any message
+- Images: --image path/to/image.png
+- Exit: Type 'quit'
 
-Custom question:
-```bash
-python src/main.py --images image.jpg
-```
+## Example
+Get a random cat image:
+curl -o cat.png https://cataas.com/cat
+
+Then analyze it:
+python src/main.py
+--image cat.png
+
+## License
+MIT
