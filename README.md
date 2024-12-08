@@ -9,7 +9,11 @@ langgraph/
 │   ├── src/
 │   │   ├── main.ts
 │   │   ├── conversationGraph.ts
-│   │   └── types.ts
+│   │   ├── types.ts
+│   │   ├── schema/
+│   │   │   ├── typeDefs.ts      # GraphQL type definitions
+│   │   │   └── resolvers.ts     # GraphQL resolvers
+│   │   └── server.ts            # Apollo Server setup
 │   └── package.json
 │
 └── python/              # Python implementation
@@ -106,3 +110,104 @@ Contributions welcome! Please read our contributing guidelines and submit pull r
 
 ## License
 MIT License - see LICENSE file for details
+
+### GraphQL API
+
+Start the GraphQL server:
+```bash
+npm run serve
+```
+
+Example queries:
+```graphql
+# Get conversation state
+query GetState {
+  getState {
+    messages {
+      role
+      content
+    }
+    imageAnalysis {
+      id
+      content
+    }
+  }
+}
+
+# Send a message
+mutation SendMessage {
+  sendMessage(content: "Hello Claude!") {
+    role
+    content
+  }
+}
+
+# Analyze an image
+mutation AnalyzeImage {
+  analyzeImage(base64Image: "...base64 encoded image...") {
+    id
+    content
+  }
+}
+```
+
+### GraphQL Client Commands
+
+The agent can discover and query GraphQL servers using these commands:
+
+```bash
+# Discover a GraphQL server and its schema
+discover graphql https://api.example.com/graphql
+
+# Execute a query against a discovered server
+query graphql https://api.example.com/graphql query { 
+  users { 
+    id 
+    name 
+  } 
+}
+```
+
+The agent will:
+- Discover available types and fields through introspection
+- Cache GraphQL clients for discovered servers
+- Execute queries and return formatted results
+- Handle errors gracefully with informative messages
+
+### Test with public GraphQL APIs:
+
+# Star Wars API
+discover graphql https://swapi-graphql.netlify.app/.netlify/functions/index
+query graphql https://swapi-graphql.netlify.app/.netlify/functions/index query { 
+  allFilms {
+    films {
+      title
+      releaseDate
+    }
+  }
+}
+
+# Countries API
+discover graphql https://countries.trevorblades.com/graphql
+
+# Example query for Countries
+query graphql https://countries.trevorblades.com/graphql query {
+  countries {
+    name
+    capital
+    currency
+  }
+}
+
+# Rick and Morty API
+discover graphql https://rickandmortyapi.com/graphql
+
+# Example query for Rick and Morty
+query graphql https://rickandmortyapi.com/graphql query {
+  characters {
+    results {
+      name
+      species
+    }
+  }
+}

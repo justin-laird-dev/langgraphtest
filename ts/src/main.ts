@@ -1,120 +1,57 @@
-import * as dotenv from 'dotenv';
-import * as readline from 'readline';
-import { ConversationState, Graph } from './types';
-import { BufferMemory } from "langchain/memory";
-import { ChatAnthropic } from "@langchain/anthropic";
-import { createConversationGraph } from './conversationGraph';
-import { AIMessage, HumanMessage } from "@langchain/core/messages";
-import * as fs from 'fs';
+import { createInterface } from 'readline';
+import { SchemaDiscoveryTool, GraphQLQueryTool } from './tools/graphqlTools.js';
+import { config } from 'dotenv';
 
-async function main() {
-    dotenv.config();
-    const apiKey = process.env.ANTHROPIC_API_KEY;
-    
-    if (!apiKey) {
-        throw new Error("ANTHROPIC_API_KEY not found in environment variables");
-    }
-    
-    const llm = new ChatAnthropic({
-        anthropicApiKey: apiKey,
-        modelName: "claude-3-sonnet-20240229"
-    });
-    
-    console.log("Debug: Creating conversation graph");
-    const graph = createConversationGraph(apiKey);
-    
-    // Initialize state
-    const state: ConversationState = {
-        messages: [],
-        memory: new BufferMemory(),
-        image_analysis: {}
-    };
-    
-    console.log("Welcome! Send messages or use '--image path/to/image.jpg' to analyze images. Type 'quit' to exit.");
-    
-    const rl = readline.createInterface({
-        input: process.stdin,
-        output: process.stdout
-    });
+config();
 
-    while (true) {
-        const userInput = await new Promise<string>(resolve => rl.question("\nYou: ", resolve));
-        
-        if (userInput.toLowerCase() === 'quit') {
-            break;
-        }
-        
-        try {
-            // Handle image input
-            if (userInput.startsWith('--image')) {
-                const imagePath = userInput.split(' ')[1];
-                if (!fs.existsSync(imagePath)) {
-                    console.log(`Error: Image file not found: ${imagePath}`);
-                    continue;
-                }
-                
-                const imageData = fs.readFileSync(imagePath);
-                state.messages.push(new HumanMessage({ 
-                    content: "Please analyze this image",
-                    additional_kwargs: { image_data: imageData }
-                }));
-            } else {
-                state.messages.push(new HumanMessage({ content: userInput }));
-            }
-            
-            // Process through graph
-            const newState = await executeGraph(state, graph);
-            
-            // Update state and show response
-            if (newState.messages.length > 0) {
-                const lastMessage = newState.messages[newState.messages.length - 1];
-                if (lastMessage instanceof AIMessage) {
-                    console.log("\nClaude:", lastMessage.content);
-                }
-            }
-            
-            // Update state for next iteration
-            Object.assign(state, newState);
-            
-        } catch (error) {
-            console.error("Error:", error);
-        }
+const WELCOME_MESSAGE = `Welcome to GraphQL Explorer! 🚀
+
+I'm your AI assistant for discovering and querying GraphQL APIs. I can help you:
+• Discover and understand new GraphQL APIs
+• Generate and execute queries based on your questions
+• Keep track of APIs you've explored
+
+To get started:
+1. Share a GraphQL endpoint URL (starts with http)
+2. I'll analyze its capabilities and show you what's possible
+3. Then you can ask questions about the data!
+
+Some popular GraphQL APIs to try:
+• https://graphql.anilist.co (Anime/Manga data)
+• https://countries.trevorblades.com/graphql (Country information)
+• https://rickandmortyapi.com/graphql (Rick and Morty show data)
+
+What API would you like to explore?`;
+
+const rl = createInterface({
+    input: process.stdin,
+    output: process.stdout
+});
+
+const schemaDiscovery = new SchemaDiscoveryTool(process.env.ANTHROPIC_API_KEY || '');
+const queryTool = new GraphQLQueryTool(process.env.ANTHROPIC_API_KEY || '');
+
+async function processInput(input: string): Promise<void> {
+    if (input.toLowerCase() === 'quit') {
+        console.log('Thanks for exploring GraphQL APIs with me! Come back anytime! 👋');
+        rl.close();
+        return;
     }
 
-    rl.close();
-}
-
-async function executeGraph(state: ConversationState, graph: Graph) {
-    console.log("Debug: Starting graph execution");
-    let currentNode = graph.startNode;
-    let currentState = { ...state };
-
-    while (currentNode && currentNode !== graph.endNode) {
-        console.log(`Debug: Processing node: ${currentNode}`);
-        const node = graph.nodes.get(currentNode);
-        if (!node) {
-            console.log(`Debug: No node found for ${currentNode}`);
-            break;
+    try {
+        if (input.startsWith('http')) {
+            const response = await schemaDiscovery._call(input);
+            console.log(response);
+        } else {
+            const response = await queryTool._call(input);
+            console.log(response);
         }
-
-        try {
-            currentState = await node.process(currentState);
-            const nextNode = graph.edges.get(currentNode);
-            if (!nextNode) {
-                console.log(`Debug: No edge found from ${currentNode}`);
-                break;
-            }
-            currentNode = nextNode;
-        } catch (error) {
-            console.error(`Debug: Error in node ${currentNode}:`, error);
-            throw error;
-        }
+    } catch (error) {
+        console.error('Error:', error);
     }
 
-    console.log("Debug: Graph execution completed");
-    return currentState;
+    rl.question('> ', processInput);
 }
 
-if (require.main === module) {
-    main().catch(console.error);
-}
+console.log(WELCOME_MESSAGE);
+rl.question('> ', processInput);

@@ -5,7 +5,7 @@
   "main": "dist/main.js",
   "scripts": {
     "build": "tsc",
-    "start": "ts-node src/main.ts",
+    "start": "NODE_OPTIONS='--loader ts-node/esm' ts-node src/main.ts",
     "dev": "ts-node-dev --respawn src/main.ts"
   },
   "keywords": [],
@@ -16,10 +16,13 @@
     "@langchain/anthropic": "^0.1.1",
     "@langchain/community": "^0.0.34",
     "@langchain/core": "^0.2.21",
-    "@types/node": "^20.11.24",
+    "@langchain/langgraph": "^0.0.8",
     "dotenv": "^16.4.7",
+    "graphql": "^16.9.0",
+    "graphql-request": "^7.1.2",
     "langchain": "^0.1.9",
     "ts-node": "^10.9.2",
     "typescript": "^5.3.3"
-  }
+  },
+  "type": "module"
 }
