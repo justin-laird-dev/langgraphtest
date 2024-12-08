@@ -1,83 +1,108 @@
-# LangGraph Demo with Claude Vision
+# LangGraph Implementations
 
-A comprehensive demonstration of Claude 3's multimodal capabilities integrated with LangGraph for structured conversation workflows. This project showcases how to build an interactive chat application with image analysis features using TypeScript and the latest Claude 3 model.
+Demonstration of LangGraph implementations in both TypeScript and Python, showcasing structured conversation workflows with Claude 3's multimodal capabilities.
+
+## Project Structure
+```
+langgraph/
+├── ts/                   # TypeScript implementation
+│   ├── src/
+│   │   ├── main.ts
+│   │   ├── conversationGraph.ts
+│   │   └── types.ts
+│   └── package.json
+│
+└── python/              # Python implementation
+    └── src/
+        ├── main.py
+        └── conversation_graph.py
+```
+
+## TypeScript Implementation
+
+### Setup
+1. Install dependencies:
+```bash
+cd ts
+npm install
+```
+
+2. Create a `.env` file:
+```bash
+ANTHROPIC_API_KEY=your_key_here
+```
+
+### Run
+```bash
+npm start
+```
+
+## Python Implementation
+
+### Setup
+1. Install dependencies:
+```bash
+cd python
+pip install -r requirements.txt
+```
+
+2. Create a `.env` file:
+```bash
+ANTHROPIC_API_KEY=your_key_here
+```
+
+### Run
+```bash
+python src/main.py
+```
 
 ## Features
-- Interactive chat powered by Claude 3 Sonnet (latest model: claude-3-sonnet-20240229)
-- Advanced image analysis using Claude's multimodal capabilities
-- Structured conversation flow using LangGraph
-- Robust memory and context management
-- Support for multiple image formats (JPEG, PNG)
-- Type-safe implementation in TypeScript
-- Detailed debugging and error handling
+- Structured conversation flows using LangGraph
+- Claude 3 integration for:
+  - Advanced text analysis
+  - Image understanding
+  - Multi-turn conversations
+- Memory management
+- Type-safe implementations
 
-## Architecture
-The project uses a graph-based architecture with distinct nodes for:
-- Image analysis
-- Response generation
-- State management
-- Memory handling
+## Documentation References
 
-## Prerequisites
-- Node.js 18+ 
-- TypeScript 5.3+
-- An Anthropic API key
+### LangGraph
+- [LangGraph Documentation](https://python.langchain.com/docs/langgraph)
+- [LangGraph GitHub](https://github.com/langchain-ai/langgraph)
 
-## Setup & Installation
+### Anthropic Claude
+- [Claude API Documentation](https://docs.anthropic.com/claude/docs)
+- [Claude TypeScript SDK](https://github.com/anthropics/anthropic-sdk-typescript)
+- [Claude Python SDK](https://github.com/anthropics/anthropic-sdk-python)
 
-1. Clone the repository:
-   \`\`\`
-   git clone https://github.com/yourusername/langgraph-demo
-   cd langgraph-demo
-   \`\`\`
+### LangChain
+- [LangChain Documentation](https://python.langchain.com/docs/get_started/introduction)
+- [LangChain TypeScript](https://js.langchain.com/docs/get_started/introduction)
 
-2. Install dependencies:
-   \`\`\`
-   npm install
-   \`\`\`
+## Requirements
 
-3. Create a \`.env\` file in the root directory:
-   \`\`\`
-   ANTHROPIC_API_KEY=your_api_key_here
-   \`\`\`
+### TypeScript
+- Node.js 16+
+- TypeScript 4.5+
+- @anthropic-ai/sdk
+- @langchain/core
+
+### Python
+- Python 3.9+
+- anthropic
+- langgraph
+- langchain
 
 ## Usage
 
-\`\`\`typescript
-import { ChatFlow } from './src/chatFlow';
-
-const flow = new ChatFlow();
-await flow.start({
-  message: "Analyze this image",
-  imageUrl: "./path/to/image.jpg"
-});
-\`\`\`
-
-## Project Structure
-\`\`\`
-langgraph-demo/
-├─�├─�├─�├─�├─�├─�├─� ├── imageAnalysis.ts
-│   │   ├�│   │   ├�│   │   ├�│   │   ��─ stateManagement.ts
-│   ├── types/
-│   │   └── index.ts
-│   └── chatFlow.ts
-├── tests/
-├── .env
-└── package.json
-\`\`\`
+### Commands
+- Text chat: Type your message and press Enter
+- Image analysis: `--image path/to/image.jpg`
+- Exit: Type `quit`
 
 ## Contributing
-1. Fork the repository
-2.2.2.2.2.2.2.2.eature branch (\`git che2.2.2.2.2.2.ture/amazing-feature\`)
-3. Commit your changes (\`git commit -m 'Add some amazing featu3. Commit your ch the branch (\`git3. Commit your changes (\`git commit -m 'Add some amaz Request
+Contributions welcome! Please read our contributing guidelines and submit pull requests.
 
 ## License
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Acknowledgments
-- Anthropic for the Claude 3 API
-- LangGraph community
-- Contributors and maintainers
-
-## Support
-For support, please open an issue in the GitHub repository or contact the maintainers.
+MIT License - see LICENSE file for details
