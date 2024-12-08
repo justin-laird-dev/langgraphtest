@@ -1,36 +1,28 @@
 # LangGraph Demo with Claude Vision
 
-A demonstration of Claude 3's multimodal capabilities using LangGraph for workflow management.
+A comprehensive demonstration of Claude 3's multimodal capabilities integrated with LangGraph for structured conversation workflows. This project showcases how to build an interactive chat application with image analysis features using TypeScript and the latest Claude 3 model.
 
 ## Features
-- Interactive chat with Claude 3 Sonnet
-- Image analysis using Claude's vision capabilities 
-- Conversation memory and context management
-- Support for multiple image formats (png, jpg, jpeg, gif)
+- Interactive chat powered by Claude 3 Sonnet (latest model: claude-3-sonnet-20240229)
+- Advanced image analysis using Claude's multimodal capabilities
+- Structured conversation flow using LangGraph
+- Robust memory and context management
+- Support for multiple image formats (JPEG, PNG)
+- Type-safe implementation in TypeScript
+- Detailed debugging and error handling
 
-## Setup & Usage
+## Architecture
+The project uses a graph-based architecture with distinct nodes for:
+- Image analysis
+- Response generation
+- State management
+- Memory handling
 
-1. Install dependencies:
-   pip install -r requirements.txt
+## Prerequisites
+- Node.js 18+ 
+- TypeScript 5.3+
+- An Anthropic API key
 
-2. Create .env file with your API key:
-   ANTHROPIC_API_KEY=your_key_here
+## Setup & Installation
 
-3. Run the application:
-   python src/main.py
-
-## Commands
-- Chat: Type any message
-- Images: --image path/to/image.png
-- Exit: Type 'quit'
-
-## Example
-Get a random cat image:
-curl -o cat.png https://cataas.com/cat
-
-Then analyze it:
-python src/main.py
---image cat.png
-
-## License
-MIT
+1. Clone the repository:
