@@ -1,1 +1,123 @@
-# GraphQL API Explorer\n\nAn intelligent agent for exploring and querying GraphQL APIs with natural language.\n\n## Features\n\n- 🔍 **API Discovery**: Automatically analyzes GraphQL endpoints and their capabilities\n- 💬 **Natural Language Queries**: Ask questions in plain English about the data\n- 📊 **Smart Pagination**: Handles large datasets efficiently\n- 🔄 **Multi-API Support**: Switch between different GraphQL APIs seamlessly\n- 🛡️ **Error Handling**: Graceful handling of timeouts and API errors\n\n## Getting Started\n\n```bash\nnpm install\nnpm run dev\n```\n\n## Supported APIs\n\n- **Anime/Manga**: https://graphql.anilist.co\n- **Countries**: https://countries.trevorblades.com/graphql\n- **Rick and Morty**: https://rickandmortyapi.com/graphql\n\n## Architecture\n\n```\nsrc/\n├── main.ts              # Entry point and agent orchestration\n├── tools/              \n│   ├── graphqlTools.ts  # GraphQL query execution\n│   └── discovery.ts     # Schema analysis\n└── types/\n    └── index.ts         # TypeScript definitions\n```\n\n## Example Usage\n\n```typescript\nconst agent = new GraphQLAgent();\n\n// Discover an API\nawait agent.processInput("https://graphql.anilist.co");\n\n// Ask questions\nawait agent.processInput("What are the top 10 anime from 2023?");\n```\n\n## Error Handling\n\n- Timeout protection for large queries\n- Automatic pagination for large datasets\n- Rate limiting compliance\n- Graceful schema discovery failures\n\n## Development\n\n### Prerequisites\n\n- Node.js 18+\n- TypeScript 5+\n- GraphQL knowledge (helpful but not required)\n\n### Running Tests\n\n```bash\nnpm test\n```\n\n### Contributing\n\n1. Fork the repository\n2. Create your feature branch\n3. Commit your changes\n4. Push to the branch\n5. Create a Pull Request\n\n## License\n\nMIT License - see LICENSE file for details\n\n## Acknowledgments\n\n- GraphQL Foundation\n- Public API providers\n- Open source community
+# GraphQL Explorer
+
+An AI-powered assistant that helps you explore and interact with GraphQL APIs using natural language. It understands multiple APIs simultaneously and intelligently chooses the right one for your questions.
+
+## Features
+
+- 🧠 **API Understanding**: Automatically learns what each GraphQL API can do
+- 🎯 **Smart API Selection**: Picks the most relevant API for your questions
+- 💬 **Natural Language**: Just ask questions in plain English
+- 🔍 **Auto-Discovery**: Analyzes any GraphQL API you share
+- 🤹 **Multi-API**: Works with multiple APIs at once
+- 📝 **Detailed Logging**: Optional debug mode to see what's happening
+
+## Quick Start
+
+```bash
+# Install dependencies
+npm install
+
+# Set up your API key
+cp .env.example .env
+# Add your Anthropic API key to .env
+
+# Run the explorer
+npm start
+```
+
+## Example Conversation
+
+```
+> What can you do?
+I can help you explore GraphQL APIs! Share an API endpoint with me or ask about data.
+
+> https://countries.trevorblades.com/graphql
+I've analyzed the API. It provides information about countries, continents, and languages.
+
+> How many countries are in Asia?
+There are 48 countries in Asia...
+
+> What's the most popular anime this season?
+Let me check the AniList API for that information...
+```
+
+## How It Works
+
+The explorer uses two main components:
+
+### 1. Schema Discovery
+- Learns what an API can do when you share it
+- Understands its capabilities and data types
+- Remembers APIs for future use
+
+### 2. Query Generation
+- Picks the right API for your question
+- Turns your question into a GraphQL query
+- Explains the results in plain English
+
+## Project Structure
+
+```
+src/
+├── tools/
+│   └── graphqlTools.ts    # API interaction logic
+├── utils/
+│   └── logging.ts         # Debug logging
+└── main.ts               # Core application
+```
+
+## Supported APIs
+
+Works with any GraphQL API! Some popular ones to try:
+
+- **Countries**: https://countries.trevorblades.com/graphql
+  - Country info, languages, continents
+  
+- **Anime/Manga**: https://graphql.anilist.co
+  - Anime, manga, characters
+  
+- **Rick & Morty**: https://rickandmortyapi.com/graphql
+  - Show characters and episodes
+
+## Debug Mode
+
+See what's happening under the hood:
+```bash
+DEBUG=graphql,agent npm start
+```
+
+Shows:
+- API requests and responses
+- Why APIs were chosen
+- Query generation process
+
+## Development
+
+### Requirements
+- Node.js 18+
+- TypeScript 4.5+
+- Anthropic API key
+
+### Key Files
+
+- `graphqlTools.ts`: Core API handling
+- `logging.ts`: Debug utilities
+- `main.ts`: Application entry point
+
+## Contributing
+
+1. Fork the repo
+2. Create a feature branch
+3. Make your changes
+4. Submit a PR
+
+## License
+
+MIT - See LICENSE file
+
+## Notes
+
+- The explorer remembers APIs between questions
+- It can handle multiple APIs at once
+- Debug mode is helpful for development
+- No API keys needed except for Anthropic
